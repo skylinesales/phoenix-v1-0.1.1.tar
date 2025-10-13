@@ -104,14 +104,22 @@ echo ""
 echo "Test 6: Check current Java version"
 
 if command -v java &> /dev/null; then
-    CURRENT_JAVA_VERSION=$(java -version 2>&1 | grep -oP 'version "?\K[0-9]+' | head -1)
-    echo "Current Java version: $CURRENT_JAVA_VERSION"
+    # Use portable version extraction (compatible with macOS, Linux, BSD)
+    CURRENT_JAVA_VERSION=$(java -version 2>&1 | head -1 | sed -E 's/.*version "?([0-9]+).*/\1/')
     
-    if [ "$CURRENT_JAVA_VERSION" -ge 21 ]; then
-        print_result 0 "Java version is 21 or higher (upgrade may not be needed)"
+    # Validate version was extracted successfully
+    if [ -n "$CURRENT_JAVA_VERSION" ] && [ "$CURRENT_JAVA_VERSION" -eq "$CURRENT_JAVA_VERSION" ] 2>/dev/null; then
+        echo "Current Java version: $CURRENT_JAVA_VERSION"
+        
+        if [ "$CURRENT_JAVA_VERSION" -ge 21 ]; then
+            print_result 0 "Java version is 21 or higher (upgrade may not be needed)"
+        else
+            echo -e "${YELLOW}INFO:${NC} Java version is $CURRENT_JAVA_VERSION (upgrade recommended)"
+            print_result 0 "Java is installed (version $CURRENT_JAVA_VERSION)"
+        fi
     else
-        echo -e "${YELLOW}INFO:${NC} Java version is $CURRENT_JAVA_VERSION (upgrade recommended)"
-        print_result 0 "Java is installed (version $CURRENT_JAVA_VERSION)"
+        echo -e "${YELLOW}WARN:${NC} Could not determine Java version"
+        print_result 0 "Java is installed but version could not be determined"
     fi
 else
     echo -e "${YELLOW}WARN:${NC} Java is not currently installed"

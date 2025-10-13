@@ -1,9 +1,9 @@
 # Java Upgrade - Quick Reference Card
 
 ## Current Status
-- **Current Java Version**: 17
+- **Current Java Version**: Check with `java -version`
 - **Target Java Version**: 21 (Latest LTS)
-- **Upgrade Required**: Yes
+- **Upgrade Status**: Run `./test-java-upgrade-tools.sh` to check if upgrade is needed
 
 ## Quick Commands
 
@@ -22,6 +22,9 @@ After upgrade, activate in current shell:
 source $HOME/.sdkman/bin/sdkman-init.sh
 sdk use java 21.0.5-tem
 ```
+
+> **Note**: The specific Java version identifier (e.g., `21.0.5-tem`) may change as new patch versions are released.
+> Check available versions with `sdk list java` after installing SDKMAN.
 
 ### Upgrade Java (APT Method - Debian/Ubuntu)
 ```bash

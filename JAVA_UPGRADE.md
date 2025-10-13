@@ -23,6 +23,9 @@ source $HOME/.sdkman/bin/sdkman-init.sh
 sdk use java 21.0.5-tem
 ```
 
+> **Note**: The version identifier `21.0.5-tem` represents Eclipse Temurin JDK 21.0.5.
+> Newer patch versions may be available. Use `sdk list java` to see all available Java 21 versions.
+
 ### Option 2: APT-based Upgrade (Debian/Ubuntu)
 
 For systems using APT package manager:
