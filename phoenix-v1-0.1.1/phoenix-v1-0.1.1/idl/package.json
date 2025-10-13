@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@metaplex-foundation/rustbin": "^0.3.1"
+  }
+}
