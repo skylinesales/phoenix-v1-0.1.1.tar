@@ -1,0 +1,54 @@
+name: Java Version Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  check-java-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Java 21 (LTS)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        
+    - name: Verify Java version
+      run: |
+        echo "Checking Java version..."
+        java -version
+        
+        # Extract version number
+        JAVA_VERSION=$(java -version 2>&1 | grep -oP 'version "?\K[0-9]+' | head -1)
+        
+        echo "Detected Java version: $JAVA_VERSION"
+        
+        if [ "$JAVA_VERSION" -eq 21 ]; then
+          echo "✓ Java 21 LTS is correctly installed"
+        else
+          echo "✗ Expected Java 21, but found Java $JAVA_VERSION"
+          exit 1
+        fi
+        
+    - name: Check .java-version file
+      run: |
+        if [ -f .java-version ]; then
+          EXPECTED_VERSION=$(cat .java-version)
+          echo "Expected Java version from .java-version: $EXPECTED_VERSION"
+          
+          JAVA_VERSION=$(java -version 2>&1 | grep -oP 'version "?\K[0-9]+' | head -1)
+          
+          if [ "$JAVA_VERSION" -eq "$EXPECTED_VERSION" ]; then
+            echo "✓ Java version matches .java-version file"
+          else
+            echo "✗ Java version mismatch!"
+            exit 1
+          fi
+        fi
