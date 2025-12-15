@@ -19,18 +19,27 @@ cargo install --path .
 
 ## Usage
 
+**Note:** The `--repo-url` parameter is currently not used by the tool. You should clone the repository manually and run the tool from within the repository directory. This gives you more control over the source code you're verifying.
+
 ### Build a program
 
+Build from the current directory (clone the repository first):
+
 ```bash
+git clone <REPO_URL>
+cd <repo-directory>
 solana-verifiable-build build \
-  --repo-url https://github.com/user/repo \
   --mount-path programs/my-program \
   --commit-hash abc123
 ```
 
 ### Verify a program from source
 
+Verify from the current directory (clone the repository first):
+
 ```bash
+git clone <REPO_URL>
+cd <repo-directory>
 solana-verifiable-build verify-from-repo \
   --program-id <PROGRAM_ID> \
   --name-of-program my_program \
