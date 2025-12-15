@@ -9,7 +9,6 @@ use solana_sdk::{
     bpf_loader_upgradeable::{self, UpgradeableLoaderState},
     pubkey::Pubkey,
 };
-use uuid::Uuid;
 
 pub fn get_network(network_str: &str) -> &str {
     match network_str {
@@ -162,17 +161,20 @@ pub fn build(
 ) -> anyhow::Result<()> {
     let base_image = base_image.unwrap_or("projectserum/build:v0.26.0".to_string());
     let mount_path = filepath.unwrap_or(".".to_string());
-    let source_dir = std::env::current_dir()?.to_str().unwrap().to_string();
-    let uuid = Uuid::new_v4();
-
+    let source_dir = std::env::current_dir()?
+        .to_str()
+        .ok_or_else(|| anyhow!("Current directory path contains invalid UTF-8 characters"))?
+        .to_string();
+    
+    // Use --rm flag to automatically remove containers after execution
     run_cmd!(
-        docker run -v $source_dir:/code --name $uuid $base_image bash -c
+        docker run --rm -v $source_dir:/code $base_image bash -c
         "cd /code && git submodule update --init --recursive";
     )?;
 
     if let Some(commit_hash) = commit_hash {
         run_cmd!(
-            docker run -v $source_dir:/code --name $uuid $base_image bash -c
+            docker run --rm -v $source_dir:/code $base_image bash -c
             "cd /code && git checkout $commit_hash";
         )?;
     }
@@ -184,7 +186,7 @@ pub fn build(
     };
 
     run_cmd!(
-        docker run -v $source_dir:/code --name $uuid $base_image bash -c $build_cmd;
+        docker run --rm -v $source_dir:/code $base_image bash -c $build_cmd;
     )?;
 
     println!("Build completed successfully!");
@@ -203,9 +205,15 @@ pub fn verify_from_image(
     );
 
     let container_id = run_fun!(docker create $image)?;
-    run_cmd!(docker cp $container_id:/build/$executable_path /tmp/program.so)?;
+    // Use unique temporary file to avoid conflicts between concurrent executions
+    let temp_file = format!("/tmp/program-{}.so", container_id.trim());
+    run_cmd!(docker cp $container_id:/build/$executable_path $temp_file)?;
 
-    let executable_hash = get_file_hash("/tmp/program.so")?;
+    let executable_hash = get_file_hash(&temp_file)?;
+    
+    // Clean up the temporary file
+    std::fs::remove_file(&temp_file)?;
+    
     let client = get_client(network);
     let program_buffer =
         Pubkey::find_program_address(&[program_id.as_ref()], &bpf_loader_upgradeable::id()).0;
@@ -238,7 +246,10 @@ pub fn verify_from_repo(
     // Build the code using the docker container
     build(filepath, base_image, commit_hash, bpf_flag)?;
 
-    let source_dir = std::env::current_dir()?.to_str().unwrap().to_string();
+    let source_dir = std::env::current_dir()?
+        .to_str()
+        .ok_or_else(|| anyhow!("Current directory path contains invalid UTF-8 characters"))?
+        .to_string();
     // Both BPF and SBF build to the same target/deploy directory in modern Solana
     let build_path = format!("{}/target/deploy/{}.so", source_dir, name_of_program);
 
