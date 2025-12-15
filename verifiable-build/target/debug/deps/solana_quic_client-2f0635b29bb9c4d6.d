@@ -1,0 +1,8 @@
+/home/runner/work/phoenix-v1-0.1.1.tar/phoenix-v1-0.1.1.tar/verifiable-build/target/debug/deps/solana_quic_client-2f0635b29bb9c4d6.d: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/nonblocking/mod.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/nonblocking/quic_client.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/quic_client.rs
+
+/home/runner/work/phoenix-v1-0.1.1.tar/phoenix-v1-0.1.1.tar/verifiable-build/target/debug/deps/libsolana_quic_client-2f0635b29bb9c4d6.rmeta: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/nonblocking/mod.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/nonblocking/quic_client.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/quic_client.rs
+
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/lib.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/nonblocking/mod.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/nonblocking/quic_client.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-quic-client-1.18.26/src/quic_client.rs:
