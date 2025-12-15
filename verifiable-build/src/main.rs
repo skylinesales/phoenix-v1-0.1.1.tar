@@ -228,7 +228,6 @@ pub fn verify_from_image(
 
 pub fn verify_from_repo(
     program_id: Pubkey,
-    _repo_url: Option<String>,
     filepath: Option<String>,
     base_image: Option<String>,
     bpf_flag: bool,
@@ -240,11 +239,8 @@ pub fn verify_from_repo(
     build(filepath, base_image, commit_hash, bpf_flag)?;
 
     let source_dir = std::env::current_dir()?.to_str().unwrap().to_string();
-    let build_path = if bpf_flag {
-        format!("{}/target/deploy/{}.so", source_dir, name_of_program)
-    } else {
-        format!("{}/target/deploy/{}.so", source_dir, name_of_program)
-    };
+    // Both BPF and SBF build to the same target/deploy directory in modern Solana
+    let build_path = format!("{}/target/deploy/{}.so", source_dir, name_of_program);
 
     // Get the hash of the compiled program
     println!(
@@ -269,7 +265,7 @@ fn main() -> anyhow::Result<()> {
     match args.subcommand {
         SubCommand::VerifyFromRepo {
             program_id,
-            repo_url,
+            repo_url: _,
             mount_path,
             base_image,
             name_of_program,
@@ -279,7 +275,6 @@ fn main() -> anyhow::Result<()> {
         } => {
             let (executable_hash, program_hash) = verify_from_repo(
                 program_id,
-                repo_url,
                 mount_path,
                 base_image,
                 bpf,
