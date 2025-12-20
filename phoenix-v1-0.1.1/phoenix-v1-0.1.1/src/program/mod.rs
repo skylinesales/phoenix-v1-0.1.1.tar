@@ -4,6 +4,10 @@ pub(crate) mod token_utils;
 pub(crate) mod validation;
 
 pub mod accounts;
+#[cfg(feature = "cpi")]
+pub mod cpi;
+#[cfg(all(test, feature = "cpi"))]
+mod cpi_tests;
 pub mod dispatch_market;
 pub mod error;
 pub mod events;
